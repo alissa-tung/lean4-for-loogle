@@ -8,7 +8,10 @@ in { pkgs ? flakePkgs.nixpkgs, pkgsDist ? pkgs }:
     stdenv = pkgs.overrideCC pkgs.stdenv flakePkgs.llvmPackages.clang;
   } (rec {
     buildInputs = with pkgs; [
-      cmake gmp ccache
+      cmake gmp
+      ccache.overrideAttrs (final: prev: {
+        doCheck = false;
+      })
       flakePkgs.llvmPackages.llvm  # llvm-symbolizer for asan/lsan
     ];
     # https://github.com/NixOS/nixpkgs/issues/60919
